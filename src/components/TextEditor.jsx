@@ -15,7 +15,7 @@ import {
   deleteImages,
   getImgUrls,
   saveToServer,
-} from './editorUtils';
+} from './TextEditorUtils';
 function TextEditor() {
   const { id: documentId } = useParams();
   // console.log(documentId);

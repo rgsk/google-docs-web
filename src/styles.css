@@ -12,6 +12,7 @@ body {
   min-height: 11in;
   padding: 1in;
   margin: 1rem;
+  margin-top: 5rem;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
   background-color: white;
 }
@@ -25,8 +26,11 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  position: sticky;
+  position: fixed;
+  width: 100vw;
   top: 0;
+  left: 0;
+  padding: 1rem 0;
   z-index: 1;
   background-color: #f3f3f3;
   border: none;
