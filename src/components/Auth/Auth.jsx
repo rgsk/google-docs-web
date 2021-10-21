@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Switch, Route } from 'react-router';
 import Signup from './Signup';
-import PrivateRoute from '../PrivateRoute';
+import PrivateRoute from './PrivateRoute';
 import Dashboard from './Dashboard';
 import ForgotPassword from './ForgotPassword';
 import Login from './Login';

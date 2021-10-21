@@ -5,7 +5,7 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 export function AuthProvider({ children }) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState();
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -26,11 +26,12 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
   useEffect(() => {
-    // const unsubscribe = auth.onAuthStateChanged((user) => {
-    //   setCurrentUser(user);
-    //   setLoading(false);
-    // });
-    // return unsubscribe;
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      setLoading(false);
+    });
+    auth.checkUserLocally();
+    return unsubscribe;
   }, []);
   const value = {
     currentUser,

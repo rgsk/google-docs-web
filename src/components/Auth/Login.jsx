@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { Link, useHistory } from 'react-router-dom';
+import MyLoader from '../../shared/MyLoader';
 function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -15,15 +16,26 @@ function Login() {
       setError('');
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      history.push('/');
+      history.push('/auth');
     } catch (err) {
-      console.log(err);
-      setError('Failed to login');
+      // console.log(err);
+      setError(err.message);
     }
     setLoading(false);
   }
+  const [didMount, setDidMount] = useState(false);
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
   return (
     <>
+      {loading && <MyLoader />}
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Log In</h2>
@@ -51,7 +63,7 @@ function Login() {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        Need an account? <Link to="/signup">Sign Up</Link>
+        Need an account? <Link to="/auth/signup">Sign Up</Link>
       </div>
     </>
   );

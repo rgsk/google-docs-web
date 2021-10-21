@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import MyLoader from '../../shared/MyLoader';
 
 function Signup({ history }) {
   const emailRef = useRef();
@@ -19,15 +20,26 @@ function Signup({ history }) {
       setError('');
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
-      history.push('/');
+      history.push('/auth');
     } catch (err) {
-      console.log(err);
-      setError('Failed to create an account');
+      // console.log(err);
+      setError(err.message);
     }
     setLoading(false);
   }
+  const [didMount, setDidMount] = useState(false);
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
   return (
     <>
+      {loading && <MyLoader />}
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
@@ -60,7 +72,7 @@ function Signup({ history }) {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        Already have an account? <Link to="/login">Log In</Link>
+        Already have an account? <Link to="/auth/login">Log In</Link>
       </div>
     </>
   );

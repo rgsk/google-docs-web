@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import MyLoader from '../../shared/MyLoader';
 // updating email and password works only one at a time
 // can't update email and password both at a time
 function UpdateProfile({ history }) {
@@ -27,18 +28,29 @@ function UpdateProfile({ history }) {
     setLoading(true);
     Promise.all(promises)
       .then(() => {
-        history.push('/');
+        history.push('/auth');
       })
-      .catch((e) => {
-        console.log(e);
-        setError('Failed to update account');
+      .catch((err) => {
+        // console.log(err);
+        setError(err.message);
       })
       .finally(() => {
         setLoading(false);
       });
   }
+  const [didMount, setDidMount] = useState(false);
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, []);
+
+  if (!didMount) {
+    return null;
+  }
   return (
     <>
+      {loading && <MyLoader />}
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Update Profile</h2>
@@ -76,7 +88,7 @@ function UpdateProfile({ history }) {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+        <Link to="/auth">Cancel</Link>
       </div>
     </>
   );
